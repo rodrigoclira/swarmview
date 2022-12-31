@@ -27,11 +27,11 @@ class SwarmView():
         if not is_3d:
             ax = fig.add_subplot(1, 1, 1)
             plot_2d_pso(self.meshgrid, self.function, positions, None, ax=ax)        
-            ax.set_title(f"it={iteration}  {title}")
         else:
-            #ax = None
-            plot_3d_pso(self.meshgrid, self.function, positions, None, ax=None)
+            ax = fig.add_subplot(1, 1, 1, projection='3d')  
+            plot_3d_pso(self.meshgrid, self.function, positions, None, ax=ax)
 
+        ax.set_title(f"it={iteration}  {title}")
         save_path = None if not save else os.path.join(self.tmp_dir, f'{iteration:05d}.png')
         
         if save_path is None:
