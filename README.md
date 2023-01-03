@@ -42,9 +42,11 @@ There is a example in view.py
 ```python
 sv = SwarmView(simuid = "teste", xmin = -5, xmax = 5, function = lambda x, y: x**2 + y**2, is_3d=False)
 
-sv.plot_view(np.array([[2, 2], [0, 0], [-1, 1]]), 0, save = True)
-sv.plot_view(np.array([[2, 0], [1, 1], [-1, 2]]), 1, save = True)
+# call the method in a loop
+sv.plot_view(positions = np.array([[2, 2], [0, 0], [-1, 1]]), iteration = 0, save = True)
+sv.plot_view(positions = np.array([[2, 0], [1, 1], [-1, 2]]), iteration = 1, save = True)
 
+# if you want, create a gif with each iteration
 sv.create_gif()
 
 ```
