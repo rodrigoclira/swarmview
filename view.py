@@ -1,14 +1,14 @@
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from utils import plot_2d_pso, plot_3d_pso, make_gif_from_folder
+from .utils import plot_2d_pso, plot_3d_pso, make_gif_from_folder
 
 ROOT = 'tmp/'
 #filename = '_tmp.gif'
 save = True
 
 class SwarmView():
-    def __init__(self, simuid, xmin, xmax, function, is_3d = False):
+    def __init__(self, simuid, xmin, xmax, function, is_3d = False, enable = True):
         self.x = np.arange(xmin, xmax, 0.05)
         self.y = np.arange(xmin, xmax, 0.05)
         self.meshgrid = np.meshgrid(self.x, self.y)
@@ -21,9 +21,14 @@ class SwarmView():
         
         if self.is_3d:
             self.projection = '3d'
-
+        
+        self.enable = enable
 
     def plot_view(self, positions, iteration, title="", save = True):
+
+        if not self.enable:
+            return None
+
         fig = plt.figure()
         
         if save:
@@ -38,7 +43,7 @@ class SwarmView():
             plot_3d_pso(self.meshgrid, self.function, positions, None, ax=ax)
 
         ax.set_title(f"it={iteration}  {title}")
-        save_path = None if not save else os.path.join(self.tmp_dir, f'{iteration:05}.png')
+        save_path = None if not save else os.path.join(self.tmp_dir, f'{iteration:05d}.png')
         
         if save_path is None:
             plt.show()
@@ -47,7 +52,8 @@ class SwarmView():
             plt.close()
 
     def create_gif(self, remove_folder = False):
-        make_gif_from_folder(self.tmp_dir, os.path.join(self.root, self.filename_output), remove_folder)
+        if self.enable:
+            make_gif_from_folder(self.tmp_dir, os.path.join(self.root, self.filename_output), remove_folder)
 
 if __name__ == '__main__':
 
