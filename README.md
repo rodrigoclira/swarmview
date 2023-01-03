@@ -29,7 +29,7 @@ Lastly, you can use the _view.SwarmView_ object calling the _plot_view_
  sv.plot_view(positions= np.array(array), title=f"{self.best_fit} - IT=({self.best_fit_it}) W={self.curr_ai_pack}", iteration=f"{iteration}")
 ```
 
-if you want to create a gif, you can use the _create_gif_ method from _SwarmView_ object
+if you want to create a gif, you must use the _create_gif_ method from _SwarmView_ object.
 
 ```python
 swarm_view.create_gif()
