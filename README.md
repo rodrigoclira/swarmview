@@ -1,6 +1,9 @@
 # Swarm View
 
-A simple class to print swarm agents in 2D search space. 
+A simple way to print swarm agents' positions in 2D search space. 
+
+ ![_tmp_teste](https://user-images.githubusercontent.com/276077/210286948-f9d0c028-1b42-4f6c-9453-b7258b860ca1.gif)
+
 It is based in [https://github.com/AxelThevenot/Particle_Swarm_Optimization](https://github.com/AxelThevenot/Particle_Swarm_Optimization)
 
 ## How to use ?
