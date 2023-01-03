@@ -14,6 +14,9 @@ After that you can import and create a _view.SwarmView_ object doing:
 
 ```python
 from swarmview.view import SwarmView
+import math
+import numpy as np
+
 # Rastrigin 
 func = lambda x, y: x ** 2 - 10 * np.cos(2 * math.pi * x) + y ** 2 - 10 * np.cos(2 * math.pi * y)
 
