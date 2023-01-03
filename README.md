@@ -2,7 +2,12 @@
 
 A simple way to print swarm agents' positions in 2D search space. 
 
- ![_tmp_teste](https://user-images.githubusercontent.com/276077/210286948-f9d0c028-1b42-4f6c-9453-b7258b860ca1.gif)
+
+![_tmp_teste](https://user-images.githubusercontent.com/276077/210286948-f9d0c028-1b42-4f6c-9453-b7258b860ca1.gif)
+
+
+![_tmp_test](https://user-images.githubusercontent.com/276077/210287110-0f3423f1-3568-4afe-9e03-ba7d81cc572a.gif)
+
 
 It is based in [https://github.com/AxelThevenot/Particle_Swarm_Optimization](https://github.com/AxelThevenot/Particle_Swarm_Optimization)
 
@@ -43,7 +48,7 @@ swarm_view.create_gif()
 There is a example in view.py 
 
 ```python
-sv = SwarmView(simuid = "test", xmin = -5, xmax = 5, function = lambda x, y: x**2 + y**2, is_3d=False)
+sv = SwarmView(simuid = "test", xmin = -5, xmax = 5, function = lambda x, y: x**2 + y**2, is_3d = False)
 
 # call the method in a loop
 sv.plot_view(positions = np.array([[2, 2], [2, 0], [-1, 1]]), iteration = 0, save = True)
