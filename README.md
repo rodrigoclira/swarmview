@@ -23,7 +23,7 @@ func = lambda x, y: x ** 2 - 10 * np.cos(2 * math.pi * x) + y ** 2 - 10 * np.cos
 swarm_view = SwarmView(simuid = simulation_id, xmin = -5.12, xmax = 5.12, is_3d = False, function = func )
 ```
 
-finally, you can use the _view.SwarmView_ object calling the _plot_view_
+Lastly, you can use the _view.SwarmView_ object calling the _plot_view_
 
 ```python
  sv.plot_view(positions= np.array(array), title=f"{self.best_fit} - IT=({self.best_fit_it}) W={self.curr_ai_pack}", iteration=f"{iteration}")
