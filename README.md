@@ -43,6 +43,8 @@ if you want to create a gif, you must use the _create_gif_ method from _SwarmVie
 swarm_view.create_gif()
 ```
 
+All the files are created in "_./tmp_" folder.
+
 ## Example
 
 There is a example in view.py 
