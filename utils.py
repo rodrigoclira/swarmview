@@ -85,9 +85,9 @@ def plot_3d_pso(meshgrid, function, particles=None, velocity=None, normalize=Tru
         ax = fig.add_subplot(1, 1, 1, projection='3d')
 
     # Plot the surface.
-    surf = ax.plot_surface(X_grid, Y_grid, Z_grid, cmap=cmap,
+    surf = ax.plot_surface(X_grid, Y_grid, Z_grid, cmap="viridis",
                            linewidth=0, antialiased=True, alpha=0.7)
-    ax.contour(X_grid, Y_grid, Z_grid, zdir='z', offset=0, levels=30, cmap=cmap)
+    ax.contour(X_grid, Y_grid, Z_grid, zdir='z', offset=0, levels=30, cmap="viridis")
     if particles is not None:
         ax.scatter(X, Y, Z, color=color, depthshade=True)
         if velocity is not None:

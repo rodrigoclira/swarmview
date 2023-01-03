@@ -38,7 +38,7 @@ class SwarmView():
             plot_3d_pso(self.meshgrid, self.function, positions, None, ax=ax)
 
         ax.set_title(f"it={iteration}  {title}")
-        save_path = None if not save else os.path.join(self.tmp_dir, f'{iteration:05d}.png')
+        save_path = None if not save else os.path.join(self.tmp_dir, f'{iteration:05}.png')
         
         if save_path is None:
             plt.show()
@@ -51,7 +51,10 @@ class SwarmView():
 
 if __name__ == '__main__':
 
-    sv = SwarmView(simuid = "teste", xmin = -5, xmax = 5, function = lambda x, y: x**2 + y**2, is_3d=False, )
+    sv = SwarmView(simuid = "test", xmin = -5, xmax = 5, function = lambda x, y: x**2 + y**2, is_3d = True)
 
-    sv.plot_view(np.array([[2, 2], [0, 0], [-1, 1]]), 0, save = True)
+    sv.plot_view(positions = np.array([[2, 2], [2, 0], [-1, 1]]), iteration = 0, save = True)
+    sv.plot_view(positions = np.array([[1, 0], [1.2, 1], [-2, 1.5]]), iteration = 1, save = True)
+    sv.plot_view(positions = np.array([[0, 0], [1, 0], [1, 2]]), iteration = 2, save = True)
+    
     sv.create_gif()
