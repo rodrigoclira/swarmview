@@ -34,7 +34,7 @@ swarm_view = SwarmView(simuid = simulation_id, xmin = -5.12, xmax = 5.12, is_3d 
 Lastly, you can use the _view.SwarmView_ object calling the _plot_view_
 
 ```python
- sv.plot_view(positions= np.array(array), title=f"{self.best_fit} - IT=({self.best_fit_it}) W={self.curr_ai_pack}", iteration=f"{iteration}")
+ swarm_view.plot_view(positions = np.array(array), title = f"{self.best_fit} - IT =({self.best_fit_it}) W={self.curr_ai_pack}", iteration=iteration)
 ```
 
 if you want to create a gif, you must use the _create_gif_ method from _SwarmView_ object.
