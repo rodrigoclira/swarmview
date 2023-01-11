@@ -7,12 +7,29 @@ ROOT = 'tmp/'
 #filename = '_tmp.gif'
 save = True
 
+class Grid():
+    def __init__(self, xmin, xmax, interval, function):
+        self.function = function
+        self.x = np.arange(xmin, xmax, interval)
+        self.y = np.arange(xmin, xmax, interval)
+        self.meshgrid = np.meshgrid(self.x, self.y, copy = False)
+        self.X_grid, self.Y_grid = self.meshgrid
+        self.Z_grid = function(self.X_grid, self.Y_grid)
+        self.X_grid_max = np.max(self.X_grid)
+        self.Y_grid_max = np.max(self.Y_grid)
+        self.X_grid_min = np.min(self.X_grid)
+        self.Y_grid_min = np.min(self.Y_grid)
+        self.Z_grid_max = np.max(self.Z_grid)
+
 class SwarmView():
     def __init__(self, simuid, xmin, xmax, function, is_3d = False, enable = True):
-        self.x = np.arange(xmin, xmax, 0.05)
-        self.y = np.arange(xmin, xmax, 0.05)
-        self.meshgrid = np.meshgrid(self.x, self.y)
-        self.function = function
+        
+        interval = 0.05 
+        if abs(xmin) + abs(xmax) > 30:
+            interval = 1 # decreasing meshgrid in high search spaces
+
+        #self.function = function
+        self.grid = Grid(xmin, xmax, interval, function)        
         self.root = ROOT + str(simuid) + os.sep
         self.filename_output = f"_tmp_{simuid}.gif"        
         self.tmp_dir = os.path.join(self.root, '_gifs')
@@ -38,9 +55,9 @@ class SwarmView():
         ax = fig.add_subplot(1, 1, 1, projection=self.projection)  
 
         if not self.is_3d:
-            plot_2d_pso(self.meshgrid, self.function, positions, None, ax=ax)        
+            plot_2d_pso(self.grid, positions, None, ax=ax)        
         else:            
-            plot_3d_pso(self.meshgrid, self.function, positions, None, ax=ax)
+            plot_3d_pso(self.grid, positions, None, ax=ax)
 
         ax.set_title(f"it={iteration}  {title}")
         save_path = None if not save else os.path.join(self.tmp_dir, f'{iteration:05d}.png')

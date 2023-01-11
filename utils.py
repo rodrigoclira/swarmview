@@ -10,8 +10,9 @@ from matplotlib import cm
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 
+
 # utils.py is a module downloaded from https://towardsdatascience.com/particle-swarm-optimization-visually-explained-46289eeb2e14
-# with minors modifications
+# with some modifications
 
 
 plt.rcParams['figure.figsize'] = [12, 6] # default = [6.0, 4.0]
@@ -34,13 +35,11 @@ def make_gif_from_folder(folder, out_file_path, remove_folder=True):
         shutil.rmtree(folder, ignore_errors=True)
 
 
-def plot_2d_pso(meshgrid, function, positions=None, velocity=None, normalize=True, color='#000', ax=None):
-    X_grid, Y_grid = meshgrid
-    Z_grid = function(X_grid, Y_grid)
+def plot_2d_pso(grid, positions=None, velocity=None, normalize=True, color='#000', ax=None):
+
     # get coordinates and velocity arrays
     if positions is not None:
         X, Y = positions.swapaxes(0, 1)
-        Z = function(X, Y)
         if velocity is not None:
             U, V = velocity.swapaxes(0, 1)
             if normalize:
@@ -53,28 +52,27 @@ def plot_2d_pso(meshgrid, function, positions=None, velocity=None, normalize=Tru
         ax = fig.add_subplot(1, 1, 1, projection='3d')
 
     # add contours and contours lines
-    ax.contour(X_grid, Y_grid, Z_grid, levels=30, linewidths=0.5, colors='#999')
-    cntr = ax.contourf(X_grid, Y_grid, Z_grid, levels=30, cmap='viridis', alpha=0.7)
+    ax.contour(grid.X_grid, grid.Y_grid, grid.Z_grid, levels=30, linewidths=0.5, colors='#999')
+    cntr = ax.contourf(grid.X_grid, grid.Y_grid, grid.Z_grid, levels=30, cmap='viridis', alpha=0.7)
+    #plt.colorbar(cntr, ax=ax, shrink=0.9)
     if positions is not None:
         ax.scatter(X, Y, color=color)
         if velocity is not None:
             ax.quiver(X, Y, U, V, color=color, headwidth=2, headlength=2, width=5e-3)
 
     # add labels and set equal aspect ratio
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_xlim(np.min(X_grid), np.max(X_grid))
-    ax.set_ylim(np.min(Y_grid), np.max(Y_grid))
+    ax.set_xlabel('D0')
+    ax.set_ylabel('D1')
+    ax.set_xlim(grid.X_grid_min, grid.X_grid_max)
+    ax.set_ylim(grid.Y_grid_min, grid.Y_grid_max)
     ax.set_aspect(aspect='equal')
 
 
-def plot_3d_pso(meshgrid, function, particles=None, velocity=None, normalize=True, color='#000', ax=None):
-    X_grid, Y_grid = meshgrid
-    Z_grid = function(X_grid, Y_grid)
+def plot_3d_pso(grid, positions=None, velocity=None, normalize=True, color='#000', ax=None):
     # get coordinates and velocity arrays
-    if particles is not None:
-        X, Y = particles.swapaxes(0, 1)
-        Z = function(X, Y)
+    if positions is not None:
+        X, Y = positions.swapaxes(0, 1)
+        Z = grid.function(X, Y)
         if velocity is not None:
             U, V = velocity.swapaxes(0, 1)
             W = function(X + U, Y + V) - Z
@@ -85,19 +83,19 @@ def plot_3d_pso(meshgrid, function, particles=None, velocity=None, normalize=Tru
         ax = fig.add_subplot(1, 1, 1, projection='3d')
 
     # Plot the surface.
-    surf = ax.plot_surface(X_grid, Y_grid, Z_grid, cmap="viridis",
+    surf = ax.plot_surface(grid.X_grid, grid.Y_grid, grid.Z_grid, cmap="viridis",
                            linewidth=0, antialiased=True, alpha=0.7)
-    ax.contour(X_grid, Y_grid, Z_grid, zdir='z', offset=0, levels=30, cmap="viridis")
-    if particles is not None:
+    ax.contour(grid.X_grid, grid.Y_grid, grid.Z_grid, zdir='z', offset=0, levels=30, cmap="viridis")
+    if positions is not None:
         ax.scatter(X, Y, Z, color=color, depthshade=True)
         if velocity is not None:
             ax.quiver(X, Y, Z, U, V, W, color=color, arrow_length_ratio=0., normalize=normalize)
 
     len_space = 10
     # Customize the axis
-    max_z = (np.max(Z_grid) // len_space + 1).astype(int) * len_space
-    ax.set_xlim3d(np.min(X_grid), np.max(X_grid))
-    ax.set_ylim3d(np.min(Y_grid), np.max(Y_grid))
+    max_z = (grid.Z_grid_max // len_space + 1).astype(int) * len_space
+    ax.set_xlim3d(grid.X_grid_min, grid.X_grid_max)
+    ax.set_ylim3d(grid.Y_grid_min, grid.Y_grid_max)
     ax.set_zlim3d(0, max_z)
     ax.zaxis.set_major_locator(LinearLocator(max_z // len_space + 1))
     ax.zaxis.set_major_formatter(FormatStrFormatter('%.0f'))
@@ -105,23 +103,12 @@ def plot_3d_pso(meshgrid, function, particles=None, velocity=None, normalize=Tru
     ax.xaxis.pane.fill = False
     ax.yaxis.pane.fill = False
     ax.zaxis.pane.fill = False
-    ax.set_xlabel('X')
-    ax.set_ylabel('Y')
-    ax.set_zlabel('f(X, Y)')
+    ax.set_xlabel('D0')
+    ax.set_ylabel('D1')
+    ax.set_zlabel('f(D0, D1)')
 
     # Add a color bar which maps values to colors.
     # fig.colorbar(surf)
 
-
 if __name__ == '__main__':
-    N = 1000
-    t = np.arange(0, N + 1)
-    w = (0.4 / N**2) * (t - N) ** 2 + 0.4
-    c_1 = -3 * t / N + 3.5
-    c_2 =  3 * t / N + 0.5
-
-    plt.plot(t, w, color='#999', label=r'$w = 0.4\frac{(t - n)}{n^2} + 0.4$')
-    plt.plot(t, c_1, color='#80f', label=r'$c_1 = -3\frac{t}{n} + 3.5$')
-    plt.plot(t, c_2, color='#80f', label=r'$c_2 = 3\frac{t}{n} + 0.5$')
-    plt.legend()
-    plt.show()
+    pass
